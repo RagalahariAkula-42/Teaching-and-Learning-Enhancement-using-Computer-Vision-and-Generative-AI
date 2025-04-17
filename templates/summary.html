@@ -1,0 +1,63 @@
+{% load static %}
+
+{% block content %}
+<body class="bg-dark text-light">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand text-light font-weight-bold" href="#">Enhancing Learning Procedure</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'purpose' %}">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <h4 class="text-center mb-4">Upload Audio or Video for Summary</h4>
+
+        <div class="card shadow-sm bg-dark text-light">
+            <header class="card-header bg-primary text-white">
+                <h5 class="card-title mt-2">Upload Your File</h5>
+            </header>
+            <article class="card-body">
+                <form method="POST" enctype="multipart/form-data" action="{% url 'summary' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="text-light">Select File (MP4, AVI, MKV, MP3, WAV, etc.)</label>
+                        <input type="file" class="form-control-file" name="file" accept=".mp4,.avi,.mkv,.mov,.flv,.wmv,.mp3,.wav,.aac,.ogg,.flac,.m4a" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Generate Summary</button>
+                    </div>
+                </form>
+            </article>
+        </div>
+
+        {% if summary_text %}
+        <div class="card mt-4 shadow-lg bg-dark text-light">
+            <header class="card-header bg-success text-white">
+                <h4 class="card-title mt-2">Generated Summary</h4>
+            </header>
+            <article class="card-body">
+                <p><strong>Summary:</strong> {{ summary_text }}</p>
+            </article>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+{% endblock content %}

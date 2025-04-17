@@ -1,0 +1,105 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ test_name }}</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Enhancing Learning Procedure</a>
+        </div>
+    </nav>
+
+    <!-- Test Section -->
+    <div class="container mt-4">
+        <h2>{{ test_name }}</h2>
+
+        <!-- Timer -->
+        <div class="alert alert-info" id="timer">
+            Remaining Time: <span id="time">--:--:--</span>
+        </div>
+
+        <form id="testForm" method="post" action="{% url 'submit_test' test_id %}">
+            {% csrf_token %}
+            {% for question in TestQuestions %}
+            <div class="form-group">
+                <p><strong>Question {{ forloop.counter }}:</strong> {{ question.question_text }}</p>
+                <div>
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="A" required>
+                        {{ question.option_a }}
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="B" required>
+                        {{ question.option_b }}
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="C" required>
+                        {{ question.option_c }}
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="D" required>
+                        {{ question.option_d }}
+                    </label>
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Submit Test</button>
+        </form>
+    </div>
+
+    <!-- Include JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ensure `test_duration_seconds` is safely passed as a JavaScript number
+            const testDuration = parseInt("{{ test_duration_seconds|default:0 }}", 10) || 0;
+            const timerElement = document.getElementById('time');
+            const form = document.getElementById('testForm');
+    
+            function formatTime(seconds) {
+                const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+                const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+                const s = (seconds % 60).toString().padStart(2, '0');
+                return `${h}:${m}:${s}`;
+            }
+    
+            function startTimer(duration) {
+                let remainingTime = duration;
+    
+                function updateTimer() {
+                    if (remainingTime <= 0) {
+                        clearInterval(timerInterval);
+                        alert('Time is up! Your test will be submitted automatically.');
+                        form.submit();
+                    } else {
+                        timerElement.textContent = formatTime(remainingTime);
+                        remainingTime -= 1;
+                    }
+                }
+    
+                updateTimer(); // Update timer immediately
+                const timerInterval = setInterval(updateTimer, 1000);
+            }
+    
+            if (testDuration > 0) {
+                startTimer(testDuration);
+            } else {
+                timerElement.textContent = '00:00:00';
+                alert('Invalid test duration. Please contact the administrator.');
+            }
+        });
+    </script>    
+</body>
+</html>
+{% endblock %}

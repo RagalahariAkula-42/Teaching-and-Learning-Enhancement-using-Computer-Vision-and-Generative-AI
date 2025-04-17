@@ -1,0 +1,83 @@
+{% load static %}
+
+{% block content %}
+<title>Sign Up</title>
+
+<body class="bg-dark text-light">
+    <!-- Include Bootstrap and other necessary styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand text-light font-weight-bold" href="#">Enhancing Learning Procedure</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'purpose' %}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link text-light" href="{% url 'login' %}">SignIn</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg bg-dark text-light">
+                    <header class="card-header bg-primary text-white">
+                        <h4 class="card-title mt-2">Sign Up</h4>
+                    </header>
+                    <article class="card-body">
+                        <form action="" method="POST">{% csrf_token %}
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" placeholder="Enter your name" name="username" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <select id="role" name="role" class="form-control" required>
+                                    <option value="" disabled selected>Select Role</option>
+                                    <option value="student">Student</option>
+                                    <option value="teacher">Teacher</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Create Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                            </div>
+
+                            <small class="text-muted">By clicking the 'Sign Up' button, you confirm that you accept our <br> Terms of Use and Privacy Policy.</small><br>
+                            <small class="text-muted">Already have an account? <a href="{% url 'login' %}">Login here</a></small>
+                        </form>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+{% endblock content %}

@@ -1,0 +1,97 @@
+{% load static %}
+
+{% block content %}
+<title>Teacher Home</title>
+
+<body class="bg-dark text-light">
+    <!-- Include Bootstrap and other necessary styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand text-light font-weight-bold" href="#">Enhancing Learning Procedure</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li><a class="nav-link text-light" href="{% url 'purpose' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'create_test' %}">Create Test</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'tests_created' %}">Tests Created</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'upload' %}">Upload</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'uploads' %}">Uploaded</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'doubts_recieved' %}">Doubts Recieved</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Section -->
+    <div class="container mt-4">
+        <h1 class="text-center">Teacher Dashboard</h1>
+        <form method="get" class="text-center">
+            <label>
+                <input type="radio" name="option" value="classes" {% if selected_option == 'classes' %}checked{% endif %} onchange="this.form.submit()">
+                Classes
+            </label>
+            <label class="ml-3">
+                <input type="radio" name="option" value="notes" {% if selected_option == 'notes' %}checked{% endif %} onchange="this.form.submit()">
+                Notes
+            </label>
+        </form>
+
+        <div class="mt-4">
+            {% if data %}
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            {% if selected_option == 'classes' %}
+                                <th>Class Name</th>
+                                <th>Class Link</th>
+                                <th>Action</th>
+                            {% else %}
+                                <th>Note Name</th>
+                                <th>Note Link</th>
+                                <th>Action</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in data %}
+                            <tr>
+                                {% if selected_option == 'classes' %}
+                                    <td>{{ item.class_name }}</td>
+                                    <td><a href="{{ item.class_link }}" target="_blank" class="text-light">{{ item.class_link }}</a></td>
+                                {% else %}
+                                    <td>{{ item.note_name }}</td>
+                                    <td><a href="{{ item.note_link }}" target="_blank" class="text-light">{{ item.note_link }}</a></td>
+                                {% endif %}
+                                <td>
+                                    <form method="post" action="{% url 'uploads' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                                        <input type="hidden" name="item_type" value="{% if selected_option == 'classes' %}classes{% else %}notes{% endif %}">
+                                        <button type="submit" name="delete_item" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-center text-muted">No data available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+{% endblock %}
