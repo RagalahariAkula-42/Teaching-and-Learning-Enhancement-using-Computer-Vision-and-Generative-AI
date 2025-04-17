@@ -5,11 +5,9 @@ This Django-based project enhances the teaching and learning experience using Co
 
 ---
 
-
 ## 📹 Project Demonstration
 
-![Project Demonstration](Project%20Demonstration.mp4)
-
+[![Project Demonstration](https://img.youtube.com/vi/CEdwwNnpVpo/0.jpg)](https://www.youtube.com/watch?v=CEdwwNnpVpo)
 
 ---
 
